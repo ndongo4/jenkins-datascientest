@@ -10,8 +10,8 @@ stages {
             steps {
                 script {
                 sh '''
-                 sudo docker rm -f jenkins
-                 sudo docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+                 docker rm -f jenkins
+                 docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
                 sleep 6
                 '''
                 }
@@ -21,7 +21,7 @@ stages {
                 steps {
                     script {
                     sh '''
-                    sudo docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                    docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
                     sleep 10
                     '''
                     }
@@ -48,8 +48,8 @@ stages {
 
                 script {
                 sh '''
-                sudo docker login -u $DOCKER_ID -p $DOCKER_PASS
-                sudo docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                docker login -u $DOCKER_ID -p $DOCKER_PASS
+                docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
                 '''
                 }
             }
@@ -64,8 +64,8 @@ stage('Deploiement en dev'){
             steps {
                 script {
                 sh '''
-                sudo rm -Rf .kube
-                sudo mkdir .kube
+                rm -Rf .kube
+                mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
                 cp fastapi/values.yaml values.yml
@@ -85,7 +85,7 @@ stage('Deploiement en staging'){
             steps {
                 script {
                 sh '''
-                sudo rm -Rf .kube
+                rm -Rf .kube
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
@@ -112,7 +112,7 @@ stage('Deploiement en staging'){
 
                 script {
                 sh '''
-                sudo rm -Rf .kube
+                rm -Rf .kube
                 mkdir .kube
                 ls
                 cat $KUBECONFIG > .kube/config
