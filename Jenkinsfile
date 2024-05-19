@@ -6,6 +6,18 @@ DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build 
 }
 agent any // Jenkins will be able to select all available agents
 stages {
+      stage('Cleanup Before Build') {
+            steps {
+                script {
+                    sh '''
+                        # Supprimer tous les conteneurs
+                        docker container rm -f $(docker ps -a -q) || true
+                        # Nettoyer les images, conteneurs et volumes inutilisés
+                        docker system prune -a -f --volumes || true
+                    '''
+                }
+            }
+        }
         stage(' Docker Build'){ // docker build image stage
             steps {
                 script {
